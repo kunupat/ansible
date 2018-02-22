@@ -1,0 +1,54 @@
+ansible-galaxy init sample_role
+
+ansible-galaxy install geerlingguy.apache
+
+ansible-galaxy init geerlingguy.apache --force
+
+-----------------------------------
+
+---
+- name: Special Tags
+  hosts: all
+  sudo: yes
+  tasks:
+    - name: location 1
+      debug: msg="california"      
+
+    - name: location 2
+      debug: msg="mumbai"
+      tags: 
+        - tag1
+
+    - name: location 3
+      debug: msg="bangalore"
+      tags:
+        - tag2
+
+    - name: location 4
+      debug: msg="chennai"      
+      tags: 
+        - always
+
+-------------------------------------
+ansible-playbook -i myhosts tag.yml --tags "tag1"
+
+ansible-playbook -i myhosts test.yml
+---
+- name: Special Tags
+  hosts: all
+  sudo: yes
+  tasks:
+  - name: Copy afile.txt to /home/ubuntu/
+    copy: src=./afile.txt dest=/home/ubuntu/
+            owner=root group=root mode=0644
+    register: result
+  - debug: msg=result
+
+
+
+---
+- name: built-in variables
+  hosts: all
+  tasks:
+    - debug: var=hostvars[inventory_hostname]
+
